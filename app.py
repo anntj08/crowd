@@ -1,6 +1,9 @@
 import cv2
 import time
-import winsound
+try:
+    import winsound
+except:
+    winsound = None
 import math
 import threading
 from flask import Flask, Response, jsonify, request, render_template
@@ -150,9 +153,13 @@ def video_loop():
                 ds = "CLOSE"
                 
             if current_time - last_alarm_time >= ALARM_INTERVAL:
-                # Play beep without blocking the video stream thread
-                threading.Thread(target=winsound.Beep, args=(ALARM_FREQ, ALARM_DURATION), daemon=True).start()
-                last_alarm_time = current_time
+    if winsound:
+        threading.Thread(
+            target=winsound.Beep,
+            args=(ALARM_FREQ, ALARM_DURATION),
+            daemon=True
+        ).start()
+    last_alarm_time = current_time
         else:
             status_text = "NORMAL"
             status_color_bgr = (0, 255, 0)
