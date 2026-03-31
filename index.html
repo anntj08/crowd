@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Crowd Control Dashboard</title>
+    <!-- Modern Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <header class="dashboard-header">
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <h1>Smart Crowd Control Dashboard</h1>
+            </div>
+            <div class="status-pill" id="connection-status">Connecting...</div>
+        </header>
+
+        <!-- ALARM BANNER -->
+        <div class="alert-banner" id="alert-banner" style="display: none;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                <path d="M12 9v4"/>
+                <path d="M12 17h.01"/>
+            </svg>
+            <strong>HIGH CROWD DENSITY DETECTED!</strong> Maximizing safety protocols...
+        </div>
+
+        <main class="dashboard-grid">
+            <!-- VIDEO FEED -->
+            <section class="card video-card">
+                <div class="card-header">
+                    <h2>Live Camera Feed</h2>
+                    <span class="live-indicator" id="live-dot"></span>
+                </div>
+                <div class="card-body video-container">
+                    <img src="/video_feed" alt="Live Video Feed" id="video-stream" onerror="this.onerror=null; this.classList.add('error');" />
+                    <div class="video-fallback">
+                        <p>Camera feed unavailable.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT COLUMN -->
+            <div class="side-panel">
+                <!-- STATS -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Crowd Count</h3>
+                        <div class="dynamic-value" id="crowd-count">--</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Density Status</h3>
+                        <div class="status-badge green" id="density-badge">UNKNOWN</div>
+                    </div>
+                </div>
+
+                <!-- HARDWARE CONTROLS -->
+                <section class="card control-card">
+                    <div class="card-header">
+                        <h2>Facility Door Control</h2>
+                    </div>
+                    <div class="card-body controls-flex">
+                        <div class="door-status-display">
+                            Current State: <strong id="door-state-text">UNKNOWN</strong>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-primary" id="btn-open" onclick="setDoorState('OPEN')">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 21h18"></path><path d="M19 21V9a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v12"></path><path d="M13 14v4"></path>
+                                </svg>
+                                OPEN DOOR
+                            </button>
+                            <button class="btn btn-danger" id="btn-close" onclick="setDoorState('CLOSE')">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path>
+                                </svg>
+                                CLOSE DOOR
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CHART -->
+                <section class="card chart-card">
+                    <div class="card-header">
+                        <h2>Crowd Analytics Trend</h2>
+                    </div>
+                    <div class="card-body chart-body">
+                        <canvas id="trendGraph"></canvas>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
